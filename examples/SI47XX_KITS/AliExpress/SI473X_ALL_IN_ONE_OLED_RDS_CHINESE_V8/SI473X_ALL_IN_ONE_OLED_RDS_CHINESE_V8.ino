@@ -233,7 +233,8 @@ int tabStep[] = {1,    // 0
                  9,    // 2
                  10,   // 3
                  50,   // 4
-                 100
+                 100,  // 5
+                 1000  // 6
                 }; // 5
 
 const int lastStep = (sizeof tabStep / sizeof(int)) - 1;
@@ -244,6 +245,7 @@ int idxStep = 3;
 */
 typedef struct
 {
+  const char *desc;        // Band description  
   uint8_t bandType;        // Band type (FM, MW or SW)
   uint16_t minimumFreq;    // Minimum frequency of the band
   uint16_t maximumFreq;    // Maximum frequency of the band
@@ -262,30 +264,30 @@ typedef struct
               Turn your receiver on with the encoder push button pressed at first time to RESET the eeprom content.
 */
 Band band[] = {
-  {LW_BAND_TYPE, 100, 510, 300, 0, 4},
-  {MW_BAND_TYPE, 520, 1720, 810, 3, 4},       // AM/MW from 520 to 1720kHz; default 810kHz; default step frequency index is 3 (10kHz); default bandwidth index is 4 (3kHz)
-  {MW_BAND_TYPE, 531, 1701, 783, 2, 4},       // MW for Europe, Africa and Asia
-  {SW_BAND_TYPE, 1700, 3500, 1900, 0, 4},     // 160 meters
-  {SW_BAND_TYPE, 3500, 4500, 3700, 0, 5},     // 80 meters
-  {SW_BAND_TYPE, 4500, 5600, 4850, 1, 4},
-  {SW_BAND_TYPE, 5600, 6800, 6000, 1, 4},
-  {SW_BAND_TYPE, 6800, 7300, 7100, 0, 4},     // 40 meters
-  {SW_BAND_TYPE, 7200, 8500, 7200, 1, 4},     // 41 meters
-  {SW_BAND_TYPE, 8500, 10000, 9600, 1, 4},
-  {SW_BAND_TYPE, 10000, 11200, 10100, 0, 4},  // 30 meters
-  {SW_BAND_TYPE, 11200, 12500, 11940, 1, 4},
-  {SW_BAND_TYPE, 13400, 13900, 13600, 1, 4},
-  {SW_BAND_TYPE, 14000, 14500, 14200, 0, 4},  // 20 meters
-  {SW_BAND_TYPE, 15000, 15900, 15300, 1, 4},
-  {SW_BAND_TYPE, 17200, 17900, 17600, 1, 4},
-  {SW_BAND_TYPE, 18000, 18300, 18100, 0, 4},  // 17 meters
-  {SW_BAND_TYPE, 21000, 21400, 21200, 0, 4},  // 15 mters
-  {SW_BAND_TYPE, 21400, 21900, 21500, 1, 4},  // 13 mters
-  {SW_BAND_TYPE, 24890, 26200, 24940, 0, 4},  // 12 meters
-  {SW_BAND_TYPE, 26200, 28000, 27500, 0, 4},  // CB band (11 meters)
-  {SW_BAND_TYPE, 28000, 30000, 28400, 0, 4},  // 10 meters
-  {FM_BAND_TYPE, 6400, 8400, 7000, 3, 0},     // FM from 64 to 84MHz; default 70MHz; default step frequency index is 3; default bandwidth index AUTO
-  {FM_BAND_TYPE, 8400, 10800, 10570, 3, 0}
+  {"ALL", SW_BAND_TYPE, 1000, 30000, 1000, 6, 4},    // All bands  
+  {"LW ", LW_BAND_TYPE, 178, 510, 178, 0, 4},        // LW
+  {"MW ", MW_BAND_TYPE, 510, 1720, 510, 3, 4},       // AM/MW from 520 to 1720kHz; default 810kHz; default step frequency index is 3 (10kHz); default bandwidth index is 4 (3kHz)
+  {"160", SW_BAND_TYPE, 1810, 2000, 1810, 0, 4},     // 160 meters (HAM)
+  {"80m", SW_BAND_TYPE, 3500, 3800, 3500, 0, 4},     // 80 meters (HAM)
+  {"75m", SW_BAND_TYPE, 3900, 4000, 3900, 1, 4},     // 75 meters (SW)
+  {"60m", SW_BAND_TYPE, 4750, 4995, 4750, 1, 4},     // 60 meters (SW) 
+  {"49m", SW_BAND_TYPE, 5900, 6200, 5900, 1, 4},     // 49 meters (SW)
+  {"41m", SW_BAND_TYPE, 7200, 7600, 7200, 1, 4},     // 41 meters (SW)
+  {"40m", SW_BAND_TYPE, 7000, 7200, 9600, 0, 4},     // 40 meters
+  {"31m", SW_BAND_TYPE, 9400, 9900, 9400, 1, 4},     // 31 meters (SW)
+  {"30m", SW_BAND_TYPE, 10100, 10150, 10100, 0, 4},  // 30 meters
+  {"25m", SW_BAND_TYPE, 11600, 12100, 11600, 1, 4},  // 25 meters (SW)
+  {"22m", SW_BAND_TYPE, 13570, 13870, 13570, 1, 4},  // 22 meters (SW)
+  {"20m", SW_BAND_TYPE, 14000, 14350, 14000, 0, 4},  // 20 meters
+  {"19m", SW_BAND_TYPE, 15100, 15830, 15100, 1, 4},  // 19 meters (SW)
+  {"17m", SW_BAND_TYPE, 18068, 18168, 18068, 0, 4},  // 17 meters
+  {"16m", SW_BAND_TYPE, 17480, 17900, 17480, 1, 4},  // 16 meters (SW)
+  {"15m", SW_BAND_TYPE, 21000, 21450, 21000, 0, 4},  // 15 meters
+  {"12m", SW_BAND_TYPE, 24890, 24990, 24890, 0, 4},  // 12 meters
+  {"11m", SW_BAND_TYPE, 27000, 28000, 27555, 0, 4},  // CB band (11 meters)
+  {"10m", SW_BAND_TYPE, 28000, 29700, 28000, 0, 4},  // 10 meters  
+  {"FM1", FM_BAND_TYPE, 6400, 8400, 7000, 3, 0},     // FM from 64 to 84MHz; default 70MHz; default step frequency index is 3; default bandwidth index AUTO
+  {"FM2", FM_BAND_TYPE, 8400, 10800, 10570, 3, 0}
 };
 
 const int lastBand = (sizeof band / sizeof(Band)) - 1;
@@ -327,7 +329,7 @@ void setup()
   oled.print("All in One Radio");
   delay(500);
   oled.setCursor(10, 3);
-  oled.print("V3.0.7F-By PU2CLR");
+  oled.print("V3.0.7G-By PU2CLR");
   delay(2000);
   // end Splash
 
@@ -825,17 +827,14 @@ void convertToChar(uint16_t value, char *strValue, uint8_t len, uint8_t dot, uin
 */
 void showFrequency()
 {
-  char *unit;
   char freqDisplay[10];
 
   if (band[bandIdx].bandType == FM_BAND_TYPE)
   {
     convertToChar(currentFrequency, freqDisplay, 5, 3, ',');
-    unit = (char *)"MHz";
   }
   else
   {
-    unit = (char *)"kHz";
     if (band[bandIdx].bandType == MW_BAND_TYPE || band[bandIdx].bandType == LW_BAND_TYPE)
       convertToChar(currentFrequency, freqDisplay, 5, 0, '.');
     else
@@ -852,7 +851,7 @@ void showFrequency()
   oled.invertOutput(false);
 
   oled.setCursor(95, 0);
-  oled.print(unit);
+  oled.print(band[bandIdx].desc);
 }
 
 /**
@@ -964,7 +963,10 @@ void showStep()
   oled.invertOutput(cmdStep);
   oled.print("S:");
   oled.invertOutput(false);
-  oled.print(tabStep[idxStep]);
+  if (tabStep[idxStep] == 1000) 
+    oled.print("1K");
+  else 
+    oled.print(tabStep[idxStep]);
 }
 
 /**
