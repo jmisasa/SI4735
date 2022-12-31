@@ -946,14 +946,11 @@ void showBandDesc()
 */
 void showRSSI()
 {
-  int bars = (rssi / 20.0) + 1;
   oled.setCursor(90, 3);
   oled.print("      ");
   oled.setCursor(90, 3);
-  oled.print(".");
-  for (int i = 0; i < bars; i++)
-    oled.print('_');
-  oled.print('|');
+  oled.print(rssi);
+  oled.print("dB");
 
   if (currentMode == FM)
   {
