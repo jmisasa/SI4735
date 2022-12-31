@@ -122,7 +122,7 @@ const uint16_t cmd_0x15_size = sizeof cmd_0x15;         // Array of lines where 
 #define DEFAULT_VOLUME 45 // change it for your favorite sound volume
 
 #define MAX_BATTERY_MILLIVOLTS 3700
-#define MIN_BATTERY_CHECK_MILLIS 60000
+#define MIN_BATTERY_CHECK_MILLIS 5000
 
 #define FM 0
 #define LSB 1
@@ -495,21 +495,28 @@ uint8_t volumeEvent(uint8_t event, uint8_t pin) {
  * https://forum.arduino.cc/t/how-to-know-vcc-voltage-in-arduino/344001/3
  */
 void showBatteryLevel() {
-  long result;
-  uint8_t percent;
-  // Read 1.1V reference against AVcc
-  ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
-  delay(2); // Wait for Vref to settle
-  ADCSRA |= _BV(ADSC); // Convert
-  while (bit_is_set(ADCSRA,ADSC));
-  result = ADCL;
-  result |= ADCH<<8;
-  result = 1126400L / result; // Back-calculate AVcc in mV
-  percent = result * 100 / MAX_BATTERY_MILLIVOLTS;
+  if (currentMode != LSB && currentMode != USB && !bfoOn) {
+    long result;
+    uint8_t percent;
+    // Read 1.1V reference against AVcc
+    ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+    delay(2); // Wait for Vref to settle
+    ADCSRA |= _BV(ADSC); // Convert
+    while (bit_is_set(ADCSRA,ADSC));
+    result = ADCL;
+    result |= ADCH<<8;
+    result = 1126400L / result; // Back-calculate AVcc in mV
+    percent = result * 100 / MAX_BATTERY_MILLIVOLTS;
 
-  oled.setCursor(89, 2);
-  oled.print(percent);
-  oled.print("%");
+    if (currentMode == FM) {
+      oled.setCursor(93, 1);
+    } else {
+      oled.setCursor(92, 2);
+    }
+
+    oled.print(percent);
+    oled.print("%");
+  }
 }
 
 //Handle Longpress of Encoder (shortpress is handled in loop()) to mute/Unmute
